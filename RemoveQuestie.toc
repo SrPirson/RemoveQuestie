@@ -1,0 +1,7 @@
+## Interface: 50500
+## Title: RemoveQuestie
+## Notes: Allows you to cancel all or select missions from the panel.
+## Author: SrPirson
+## Version: 1.0
+RemoveQuestie.xml
+RemoveQuestie.lua
