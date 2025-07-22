@@ -1,5 +1,5 @@
 RemoveQuestie_Selections = {}
-local REMOVEQUESTIE_VERSION = "1.0"
+local REMOVEQUESTIE_VERSION = "1.01"
 
 -- Localización
 local L = {}
