@@ -15,7 +15,68 @@ if locale == "esES" or locale == "esMX" then
   L.NO_SELECTED = "No hay misiones seleccionadas para abandonar."
   L.ERROR_QUESTID = "ERROR: questID nil en checkbox"
   L.ADDON_LOADED = "cargado en la versión"
+elseif locale == "deDE" then -- Alemán
+  L.ABANDON_ALL = "Alle abbrechen"
+  L.ABANDON_SELECTED = "Ausgewählte abbrechen"
+  L.SELECT_ALL = "Alle auswählen"
+  L.UNSELECT_ALL = "Auswahl aufheben"
+  L.ALL_ABANDONED = "Alle Quests wurden abgebrochen."
+  L.SELECTED_ABANDONED = "Ausgewählte Quests abgebrochen."
+  L.NO_SELECTED = "Keine Quests ausgewählt zum Abbrechen."
+  L.ERROR_QUESTID = "FEHLER: questID nil in Checkbox"
+  L.ADDON_LOADED = "geladen in Version"
+elseif locale == "frFR" then -- Francés
+  L.ABANDON_ALL = "Abandonner tout"
+  L.ABANDON_SELECTED = "Abandonner sélectionnés"
+  L.SELECT_ALL = "Tout sélectionner"
+  L.UNSELECT_ALL = "Tout désélectionner"
+  L.ALL_ABANDONED = "Toutes les quêtes ont été abandonnées."
+  L.SELECTED_ABANDONED = "Quêtes sélectionnées abandonnées."
+  L.NO_SELECTED = "Aucune quête sélectionnée à abandonner."
+  L.ERROR_QUESTID = "ERREUR : questID nil dans la case"
+  L.ADDON_LOADED = "chargé en version"
+elseif locale == "ruRU" then -- Ruso
+  L.ABANDON_ALL = "Отменить все"
+  L.ABANDON_SELECTED = "Отменить выбранные"
+  L.SELECT_ALL = "Выбрать все"
+  L.UNSELECT_ALL = "Снять выбор"
+  L.ALL_ABANDONED = "Все задания отменены."
+  L.SELECTED_ABANDONED = "Выбранные задания отменены."
+  L.NO_SELECTED = "Нет выбранных заданий для отмены."
+  L.ERROR_QUESTID = "ОШИБКА: questID nil в флажке"
+  L.ADDON_LOADED = "загружен в версии"
+elseif locale == "zhCN" then -- Chino simplificado
+  L.ABANDON_ALL = "放弃所有"
+  L.ABANDON_SELECTED = "放弃选中"
+  L.SELECT_ALL = "全选"
+  L.UNSELECT_ALL = "取消全选"
+  L.ALL_ABANDONED = "所有任务已被放弃。"
+  L.SELECTED_ABANDONED = "已放弃选中任务。"
+  L.NO_SELECTED = "没有选中任务可放弃。"
+  L.ERROR_QUESTID = "错误：checkbox中questID为空"
+  L.ADDON_LOADED = "已加载版本"
+elseif locale == "zhTW" then -- Chino tradicional
+  L.ABANDON_ALL = "放棄所有"
+  L.ABANDON_SELECTED = "放棄選中"
+  L.SELECT_ALL = "全選"
+  L.UNSELECT_ALL = "取消全選"
+  L.ALL_ABANDONED = "所有任務已被放棄。"
+  L.SELECTED_ABANDONED = "已放棄選中任務。"
+  L.NO_SELECTED = "沒有選中任務可放棄。"
+  L.ERROR_QUESTID = "錯誤：checkbox中questID為空"
+  L.ADDON_LOADED = "已加載版本"
+elseif locale == "koKR" then -- Coreano
+  L.ABANDON_ALL = "모두 포기"
+  L.ABANDON_SELECTED = "선택한 퀘스트 포기"
+  L.SELECT_ALL = "모두 선택"
+  L.UNSELECT_ALL = "선택 해제"
+  L.ALL_ABANDONED = "모든 퀘스트를 포기했습니다."
+  L.SELECTED_ABANDONED = "선택한 퀘스트를 포기했습니다."
+  L.NO_SELECTED = "포기할 선택한 퀘스트가 없습니다."
+  L.ERROR_QUESTID = "오류: 체크박스에 questID 없음"
+  L.ADDON_LOADED = "버전 로드 완료"
 else
+  -- Inglés por defecto
   L.ABANDON_ALL = "Abandon All"
   L.ABANDON_SELECTED = "Abandon Selected"
   L.SELECT_ALL = "Select All"
@@ -32,7 +93,7 @@ local function CreateRemoveQuestieButtons()
 
   -- Botón: Abandonar todas
   local abandonAllBtn = CreateFrame("Button", "RemoveQuestie_AbandonAllButton", QuestLogFrame, "UIPanelButtonTemplate")
-  abandonAllBtn:SetSize(120, 22)
+  abandonAllBtn:SetSize(130, 22) -- ancho aumentado para idiomas largos
   abandonAllBtn:SetText(L.ABANDON_ALL)
   abandonAllBtn:SetPoint("BOTTOMLEFT", QuestLogFrame, "BOTTOMLEFT", 188, -25)
   abandonAllBtn:SetScript("OnClick", function()
@@ -50,25 +111,38 @@ local function CreateRemoveQuestieButtons()
   end)
 
   -- Botón: Abandonar seleccionadas
-  local abandonSelectedBtn = CreateFrame("Button", "RemoveQuestie_AbandonSelectedButton", QuestLogFrame, "UIPanelButtonTemplate")
-  abandonSelectedBtn:SetSize(160, 22)
-  abandonSelectedBtn:SetText(L.ABANDON_SELECTED)
-  abandonSelectedBtn:SetPoint("BOTTOMLEFT", QuestLogFrame, "BOTTOMLEFT", 4.5, -25)
-  abandonSelectedBtn:SetScript("OnClick", function()
-    local hasSelected = false
+  RemoveQuestie_AbandonSelectedButton = CreateFrame("Button", "RemoveQuestie_AbandonSelectedButton", QuestLogFrame, "UIPanelButtonTemplate")
+  RemoveQuestie_AbandonSelectedButton:SetSize(180, 22) -- ancho aumentado
+  RemoveQuestie_AbandonSelectedButton:SetText(L.ABANDON_SELECTED)
+  RemoveQuestie_AbandonSelectedButton:SetPoint("BOTTOMLEFT", QuestLogFrame, "BOTTOMLEFT", 4.5, -25)
+  RemoveQuestie_AbandonSelectedButton:SetScript("OnClick", function()
+    local questIDToIndex = {}
     local numEntries = GetNumQuestLogEntries()
-    for i = numEntries, 1, -1 do
+
+    -- Paso 1: Mapear questID → índice actual
+    for i = 1, numEntries do
       local _, _, _, isHeader, _, _, _, questID = GetQuestLogTitle(i)
-      if not isHeader and questID and questID ~= 0 and RemoveQuestie_Selections[questID] then
-        SelectQuestLogEntry(i)
+      if not isHeader and questID then
+        questIDToIndex[questID] = i
+      end
+    end
+
+    local hasSelected = false
+
+    -- Paso 2: Abandonar solo los questID seleccionados
+    for questID, _ in pairs(RemoveQuestie_Selections) do
+      local index = questIDToIndex[questID]
+      if index then
+        SelectQuestLogEntry(index)
         SetAbandonQuest()
         AbandonQuest()
         RemoveQuestie_Selections[questID] = nil
         hasSelected = true
       end
     end
+
     if hasSelected then
-      print("|cffffff00[|r|cffd597ffRemoveQuestie|r|cffffff00]|r " .. L.SELECTED_ABANDONED)
+      print("|cffffff00[|r|cffd597ffRemoveQuestie|r|cffffff00]|r " .. L.ABANDON_SELECTED)
     else
       print("|cffffff00[|r|cffff00ffRemoveQuestie|r|cffffff00]|r " .. L.NO_SELECTED)
     end
@@ -76,7 +150,7 @@ local function CreateRemoveQuestieButtons()
 
   -- Botón: Seleccionar todas
   local selectAllBtn = CreateFrame("Button", "RemoveQuestie_SelectAllButton", QuestLogFrame, "UIPanelButtonTemplate")
-  selectAllBtn:SetSize(120, 22)
+  selectAllBtn:SetSize(130, 22) -- ancho aumentado
   selectAllBtn:SetText(L.SELECT_ALL)
   selectAllBtn:SetPoint("TOPLEFT", QuestLogFrame, "TOPLEFT", 195, -32)
   selectAllBtn:SetScript("OnClick", function()
@@ -92,9 +166,9 @@ local function CreateRemoveQuestieButtons()
 
   -- Botón: Deseleccionar todas
   local unselectAllBtn = CreateFrame("Button", "RemoveQuestie_UnselectAllButton", QuestLogFrame, "UIPanelButtonTemplate")
-  unselectAllBtn:SetSize(140, 22)
+  unselectAllBtn:SetSize(150, 22) -- ancho aumentado
   unselectAllBtn:SetText(L.UNSELECT_ALL)
-  unselectAllBtn:SetPoint("TOPLEFT", QuestLogFrame, "TOPLEFT", 317, -32)
+  unselectAllBtn:SetPoint("TOPLEFT", QuestLogFrame, "TOPLEFT", 327, -32)
   unselectAllBtn:SetScript("OnClick", function()
     for k in pairs(RemoveQuestie_Selections) do
       RemoveQuestie_Selections[k] = nil
@@ -117,6 +191,8 @@ local function HookQuestLogCheckboxes()
           cb:SetAlpha(1)
           cb:Show()
           cb:SetScript("OnClick", function(self)
+            local questIndex = self:GetParent():GetID()
+            local _, _, _, isHeader, _, _, _, questID = GetQuestLogTitle(questIndex)
             if questID and questID ~= 0 then
               RemoveQuestie_Selections[questID] = self:GetChecked() or nil
             else
@@ -143,21 +219,14 @@ function RemoveQuestie_OnLoad()
 end
 
 -- Eventos
-local f = CreateFrame("Frame")
-f:RegisterEvent("PLAYER_LOGIN")
-f:SetScript("OnEvent", function()
-  RemoveQuestie_OnLoad()
-end)
-
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("PLAYER_LOGIN")
 frame:RegisterEvent("QUEST_LOG_UPDATE")
-frame:RegisterEvent("QUEST_LOG_SHOW")
 
 frame:SetScript("OnEvent", function(self, event, ...)
   if event == "PLAYER_LOGIN" then
     RemoveQuestie_OnLoad()
-  elseif event == "QUEST_LOG_UPDATE" or event == "QUEST_LOG_SHOW" then
+  elseif event == "QUEST_LOG_UPDATE" then
     HookQuestLogCheckboxes()
   end
 end)
