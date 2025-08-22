@@ -1,8 +1,28 @@
 ## Interface: 50500
-## Title: RemoveQuestie
-## Notes: Allows you to cancel all or select missions from the panel.
-## Author: Pirson
 ## Version: 1.02
+## Author: Pirson
+
+
+## Title: |TInterface/Addons/RemoveQuestie/img/logo_rq:16:16|t |cffd597ffRemove Questie|r
+
+
+## Notes: |cFF33CCFFAllows you to cancel all or select quests directly from the quest log panel (L).|r
+## Notes-deDE: |cFF33CCFFErmöglicht es dir, alle oder ausgewählte Quests direkt aus dem Questlog (L) zu löschen.|r
+## Notes-esES: |cFF33CCFFPermite cancelar todas o seleccionar misiones directamente desde el registro de misiones (L).|r
+## Notes-esMX: |cFF33CCFFPermite cancelar todas o seleccionar misiones directamente desde el registro de misiones (L).|r
+## Notes-frFR: |cFF33CCFFPermet d’abandonner toutes ou certaines quêtes directement depuis le journal des quêtes (L).|r
+## Notes-itIT: |cFF33CCFFConsente di annullare tutte o alcune missioni direttamente dal registro missioni (L).|r
+## Notes-koKR: |cFF33CCFF퀘스트 로그 패널(L)에서 모든 퀘스트 또는 선택한 퀘스트를 취소할 수 있습니다.|r
+## Notes-ptBR: |cFF33CCFFPermite cancelar todas ou selecionar missões diretamente no registro de missões (L).|r
+## Notes-ptPT: |cFF33CCFFPermite cancelar todas ou selecionar missões diretamente no registo de missões (L).|r
+## Notes-ruRU: |cFF33CCFFПозволяет отменять все или выбранные задания прямо из журнала заданий (L).|r
+## Notes-zhCN: |cFF33CCFF允许您直接从任务日志面板 (L) 中放弃所有或部分任务。|r
+## Notes-zhTW: |cFF33CCFF允許您直接從任務日誌面板 (L) 中放棄所有或部分任務。|r
+
+
+## X-Curse-Project-ID: 1308020
+## X-Wago-ID: kGr0w76y
+
 
 RemoveQuestie.xml
 RemoveQuestie.lua
