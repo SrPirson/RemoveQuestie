@@ -1,5 +1,5 @@
-## Interface: 20505, 50500, 50501, 50502, 50503, 50504
-## Version: 1.08
+## Interface: 20505, 20506, 50500, 50501, 50502, 50503, 50504
+## Version: 1.09
 ## Author: Pirson
 
 ## Title: |TInterface/Addons/RemoveQuestie/img/logo_rq:16:16|t |cffd597ffRemove Questie|r
